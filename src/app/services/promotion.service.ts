@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Promotion } from '../shared/promotion';
-import { PROMOTIONS } from '../shared/promotions';
 
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
+import { baseURL } from '../shared/baseurl';
+
+import { Restangular } from 'ngx-restangular';
 
 @Injectable({
   providedIn: 'root'
@@ -11,16 +14,17 @@ import { delay } from 'rxjs/operators';
 export class PromotionService {
 
   getPromotions(): Observable<Promotion[]> {
-    return of(PROMOTIONS).pipe(delay(2000));
+    return this.restangular.all('promotions').getList();
   }
 
   getPromotion(id: number): Observable<Promotion> {
-    return of(PROMOTIONS.filter((promotion) => (promotion.id === id))[0]).pipe(delay(2000));
+    return this.restangular.one('promotions', id).get();
   }
 
   getFeaturedPromotion(): Observable<Promotion> {
-    return of(PROMOTIONS.filter((promotion) => promotion.featured)[0]).pipe(delay(2000));
+    return this.restangular.all('promotions').getList({ featured: true })
+      .pipe(map(dishes => dishes[0]));
   }
 
-  constructor() { }
+  constructor(private restangular: Restangular) { }
 }
