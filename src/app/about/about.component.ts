@@ -13,11 +13,12 @@ export class AboutComponent implements OnInit {
   leaders: Leader[];
 
   selectedLeader: Leader;
+  errMess: string;
 
   constructor(private leaderService: LeaderService) { }
 
   ngOnInit() {
-    this.leaderService.getLeaders().subscribe(leaders => this.leaders=leaders);
+    this.leaderService.getLeaders().subscribe(leaders => this.leaders = leaders, errmess => this.errMess = <any>errmess.message);
   }
 
 }

@@ -19,6 +19,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSliderModule } from '@angular/material/slider';
 import { HttpClientModule } from '@angular/common/http';
+import { RestangularModule, Restangular } from 'ngx-restangular';
+import { RestangularConfigFactory } from './shared/restConfig';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
@@ -73,7 +75,8 @@ import { baseURL } from './shared/baseurl';
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     MatSliderModule,
-    HttpClientModule
+    HttpClientModule,
+    RestangularModule.forRoot(RestangularConfigFactory)
   ],
   entryComponents: [
     LoginComponent
