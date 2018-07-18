@@ -20,6 +20,7 @@ export class DishdetailComponent implements OnInit {
   
   dish: Dish;
   dishIds: number[];
+  dishcopy = null;
   prev: number;
   next: number;
   @ViewChild('fform') commentFormDirective;
@@ -91,15 +92,17 @@ export class DishdetailComponent implements OnInit {
     });
     var date = new Date();
     this.comment.date = date.toISOString();
-    this.dish.comments.push(this.comment);
+    this.dishcopy.comments.push(this.comment);
+    this.dishcopy.save()
+      .subscribe(dish => { this.dish = dish; console.log(this.dish); });
     this.commentFormDirective.resetForm();
   }
 
   ngOnInit() {
     this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
-    this.route.params.pipe(switchMap((params: Params) => this.dishservice
-      .getDish(+params['id'])))
-      .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); }, errmess => this.errMess= <any>errmess.message);
+    this.route.params.pipe(switchMap((params: Params) => { return this.dishservice.getDish(+params['id']); }))
+      .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setPrevNext(dish.id); },
+      errmess => { this.dish = null; this.errMess = <any>errmess; });
   }
 
   setPrevNext(dishId: number) {
